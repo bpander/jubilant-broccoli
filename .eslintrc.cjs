@@ -22,7 +22,34 @@ module.exports = {
   ignorePatterns: ["!**/.server", "!**/.client"],
 
   // Base config
-  extends: ["eslint:recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@stylistic/recommended-extends",
+  ],
+
+  plugins: ["@stylistic"],
+
+  rules: {
+    "@stylistic/member-delimiter-style": ["error", {
+      multiline: {
+        delimiter: "comma",
+        requireLast: true,
+      },
+      singleline: {
+        delimiter: "comma",
+        requireLast: false,
+      },
+      multilineDetection: "brackets",
+    }],
+    "@stylistic/no-multiple-empty-lines": ["error", {
+      max: 2,
+      maxEOF: 0,
+      maxBOF: 1,
+    }],
+    "@stylistic/quote-props": ["error", "as-needed"],
+    "@stylistic/quotes": ["error", "double"],
+    "@stylistic/semi": ["error", "always"],
+  },
 
   overrides: [
     // React
