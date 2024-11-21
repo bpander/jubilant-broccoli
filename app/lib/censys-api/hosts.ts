@@ -1,4 +1,4 @@
-import { CENSYS_API_URL, CensysResponse, getAPIHeaders } from "./util";
+import { CENSYS_API_URL, CensysResponse, excludeNullish, getAPIHeaders } from "./util";
 
 interface HostService {
 }
@@ -19,8 +19,14 @@ export interface HostsSearchResult {
   },
 }
 
-export const searchHosts = async (q: string | null): Promise<CensysResponse<HostsSearchResult>> => {
-  const res = await fetch(`${CENSYS_API_URL}/api/v2/hosts/search?q=${q || ""}`, {
+interface SearchHostsOptions {
+  q: string,
+  cursor?: string,
+}
+
+export const searchHosts = async (options: SearchHostsOptions): Promise<CensysResponse<HostsSearchResult>> => {
+  const params = new URLSearchParams(excludeNullish(options));
+  const res = await fetch(`${CENSYS_API_URL}/api/v2/hosts/search?${params.toString()}`, {
     headers: getAPIHeaders(),
   });
   return res.json();

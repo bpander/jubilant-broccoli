@@ -14,3 +14,8 @@ export const getAPIHeaders = () => {
     Authorization: `Basic ${token}`,
   };
 };
+
+export const excludeNullish = <T extends object>(t: T): Partial<T> => {
+  const entries = Object.entries(t).filter(([, v]) => v != null);
+  return Object.fromEntries(entries) as Partial<T>;
+};

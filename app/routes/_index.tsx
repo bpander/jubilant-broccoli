@@ -1,7 +1,9 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
+import { Button } from "~/components/Button";
 import { ResponsiveLogo } from "~/components/ResponsiveLogo";
 import { searchHosts } from "~/lib/censys-api/hosts.mock";
+import { SearchPagination } from "./components/SearchPagination";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,8 +13,8 @@ export const meta: MetaFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
-  const q = url.searchParams.get("q");
-  return searchHosts(q);
+  const { q = "", cursor } = Object.fromEntries(url.searchParams);
+  return searchHosts({ q, cursor });
 };
 
 export default function Index() {
@@ -29,12 +31,13 @@ export default function Index() {
               <input
                 type="search"
                 placeholder="Search"
+                name="q"
                 className="rounded-l border border-zinc-300 w-full px-2 py-1"
               />
             </label>
-            <button type="submit" className="rounded-r bg-zinc-700 border border-zinc-700 px-2 py-1 text-white">
+            <Button type="submit" className="rounded-l-none">
               Search
-            </button>
+            </Button>
           </Form>
         </div>
       </nav>
@@ -56,6 +59,12 @@ export default function Index() {
             </li>
           ))}
         </ol>
+        <div className="flex justify-center items-center">
+          <SearchPagination
+            previousToken={data.result.links.prev}
+            nextToken={data.result.links.next}
+          />
+        </div>
       </main>
     </>
   );

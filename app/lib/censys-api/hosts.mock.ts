@@ -1,11 +1,11 @@
 import * as hostsApi from "./hosts";
 
 export const { searchHosts }: typeof hostsApi = {
-  searchHosts: async (query: string | null) => ({
+  searchHosts: async ({ q }) => ({
     code: 200,
     status: "OK",
     result: {
-      query: query || "",
+      query: q,
       total: 657236316,
       duration: 258,
       hits: [
@@ -33,7 +33,7 @@ export const { searchHosts }: typeof hostsApi = {
         },
       ],
       links: {
-        next: "",
+        next: "1234",
         prev: "",
       },
     },
