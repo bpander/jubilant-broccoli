@@ -3,7 +3,7 @@ import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import { PropsWithChildren, useEffect, useRef } from "react";
 import { Button } from "~/components/Button";
 import { ResponsiveLogo } from "~/components/ResponsiveLogo";
-import { searchHosts } from "~/lib/censys-api/hosts.mock";
+import { searchHosts } from "~/lib/censys-api/hosts";
 import { SearchPagination } from "./components/SearchPagination";
 
 export const meta: MetaFunction = () => {
