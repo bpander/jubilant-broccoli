@@ -41,6 +41,9 @@ module.exports = {
       },
       multilineDetection: "brackets",
     }],
+    "@stylistic/multiline-ternary": ["error", "always", {
+      ignoreJSX: true,
+    }],
     "@stylistic/no-multiple-empty-lines": ["error", {
       max: 2,
       maxEOF: 0,
