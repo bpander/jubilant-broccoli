@@ -1,6 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import { ResponsiveLogo } from "~/components/ResponsiveLogo";
+import { searchHosts } from "~/lib/censys-api/hosts.mock";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,7 +9,15 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  return searchHosts(q);
+};
+
 export default function Index() {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <>
       <nav className="px-4 py-2 shadow bg-zinc-50">
@@ -29,6 +38,25 @@ export default function Index() {
           </Form>
         </div>
       </nav>
+
+      <main className="px-4">
+        <ol className="mx-auto max-w-screen-md">
+          {data.result.hits.map((hit, i) => (
+            <li key={i} className="my-4">
+              <dl>
+                <div className="flex">
+                  <dt className="font-bold">IP Address:</dt>
+                  <dd className="ml-2">{hit.ip}</dd>
+                </div>
+                <div className="flex">
+                  <dt className="font-bold">Number of protocols:</dt>
+                  <dd className="ml-2">{hit.services.length}</dd>
+                </div>
+              </dl>
+            </li>
+          ))}
+        </ol>
+      </main>
     </>
   );
 }
